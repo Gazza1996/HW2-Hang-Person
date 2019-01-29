@@ -10,7 +10,24 @@ class HangpersonGame
   
   def initialize(word)
     @word = word
+    
+    @a = [] 
+    @c = []
+    
+    @num = 0
+    @wordwith = []
+    @charnum = 0
   end
+  attr_accessor:word ,:guesses, :wrong_guess, :win, :lose, :play
+  
+  def guess(char)
+    if char =='' || /[A-Za-z]/ !~ char || char == nil
+      raise ArgumentError
+    end
+    
+    char = char.gsub(/[\s,]/,"")
+    
+    @charnum = char.chars.count
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
   # And then in the irb: irb(main):001:0> HangpersonGame.get_random_word
