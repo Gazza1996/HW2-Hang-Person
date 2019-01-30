@@ -28,6 +28,27 @@ class HangpersonGame
     char = char.gsub(/[\s,]/,"")
     
     @charnum = char.chars.count
+    
+    char.chars.each do|l|
+    
+    # correct guess
+      if @word.include?(l) && ((@c.include? l) == false)
+        @c.push(l)
+      # check if guess already used
+      else if (@word.include?(l) && ((@c.include?(l)) == true)) || ((@a.include?(l)) == true)
+        return false
+      # in guesses already
+      else if ((@a.include?(l)) == true) || ((('A'..'Z') === l)) || (((@c.include?(l) == true)))
+                    return false
+      # not included in char
+      elsif   @a.include?(l) == false && @c.include?(l) == false
+        @a.push(l)
+        
+      end
+    end
+    @wrong_guesses =  @a.join.to_s
+    @guesses = @c.join.to_s
+  end
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
   # And then in the irb: irb(main):001:0> HangpersonGame.get_random_word
