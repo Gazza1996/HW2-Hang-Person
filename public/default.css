@@ -19,3 +19,7 @@ span.guesses {
 	letter-spacing: 4px;
 	padding-left: 1em;
 }
+span.lose {
+	color: red;
+	font-weight: bold;
+}
