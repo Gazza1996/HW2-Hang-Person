@@ -23,3 +23,13 @@ span.lose {
 	color: red;
 	font-weight: bold;
 }
+
+span.win {
+        color: green;
+        font-weight: bold;
+}
+
+form {
+	border: 1px solid grey;
+	margin: 4px;
+}
