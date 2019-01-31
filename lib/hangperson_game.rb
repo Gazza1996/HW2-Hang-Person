@@ -49,6 +49,28 @@ class HangpersonGame
     @wrong_guesses =  @a.join.to_s
     @guesses = @c.join.to_s
   end
+  
+  def word_with_guesses
+    if@num == order
+      @word.chars.each do |l|
+        @word_with.push("-")
+      end
+      @num = 1
+    end
+    
+    a = @word.chars
+    b = @c.join.to_s
+    for i in 0..b.size - 1
+      for j in 0..@word.size
+        if b[i] == a[j]
+          @word_with[j] = a[j]
+        end
+      end
+    end
+    
+    @word_with.join.to_s
+  end
+    
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
   # And then in the irb: irb(main):001:0> HangpersonGame.get_random_word
