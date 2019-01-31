@@ -3,3 +3,19 @@ body {
 	padding: 2em;
 	border: 8px solid teal;
 }
+
+span.word {
+	letter-spacing: 4.5px;
+	color: #ff1004;
+	font-weight: bold;
+	text-transform: lowercase;
+	padding-left: 2em;
+}
+
+span.guesses {
+	text-transform: lowercase;
+	color: #ff2600;
+	font-weight: bold;
+	letter-spacing: 4px;
+	padding-left: 1em;
+}
