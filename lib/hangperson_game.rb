@@ -23,7 +23,8 @@ class HangpersonGame
         if  char == '' || /[A-Za-z]/ !~ char || char == nil
             raise ArgumentError
         end
-         char = char.gsub(/[\s,]/ ,"")
+        
+        char = char.gsub(/[\s,]/ ,"")
         
         @charNum = char.chars.count
        
@@ -37,7 +38,7 @@ class HangpersonGame
             elsif ((@a.include?(l)) == true) || ((('A'..'Z') === l)) || (((@c.include?(l) == true)))
                     return false
                      
-                 elsif   @a.include?(l) == false && @c.include?(l) == false
+            elsif   @a.include?(l) == false && @c.include?(l) == false
                     @a.push(l)
                     
             end
@@ -53,6 +54,7 @@ class HangpersonGame
             end
             @num = 1
         end
+        
         a= @word.chars
         b=@c.join.to_s
         for i in 0..b.size - 1
