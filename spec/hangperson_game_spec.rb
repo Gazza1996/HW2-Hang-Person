@@ -1,3 +1,5 @@
+# Author: Gary Mannion
+
 require 'spec_helper'
 require 'hangperson_game'
 

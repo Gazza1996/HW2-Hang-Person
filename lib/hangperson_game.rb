@@ -1,3 +1,5 @@
+# Author: Gary Mannion
+
 class HangpersonGame
 
   # add the necessary class methods, attributes, etc. here
