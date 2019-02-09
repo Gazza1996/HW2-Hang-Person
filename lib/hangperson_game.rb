@@ -6,14 +6,11 @@ class HangpersonGame
   # to make the tests in spec/hangperson_game_spec.rb pass.
 
   # Get a word from remote "random word" service
-
-  # def initialize()
-  # end
   
     def initialize(word)
         @word = word
-        @a = []
-        @c = []
+        @a = [] # wrong guess
+        @c = [] # correct guess
         @num = 0
         @word_with = []
         @charNum = 0
@@ -21,25 +18,26 @@ class HangpersonGame
     attr_accessor :word ,:guesses , :wrong_guesses , :win , :lose , :play
     
     def guess(char)
-       
+        # check char
         if  char == '' || /[A-Za-z]/ !~ char || char == nil
             raise ArgumentError
         end
         
-        char = char.gsub(/[\s,]/ ,"")
+        char = char.gsub(/[\s,]/ ,"") # spaces/commas
         
         @charNum = char.chars.count
        
         char.chars.each do |l|
+            # correct and not repeated
             if @word.include?(l) && ((@c.include? l) == false)
                 @c.push(l)
-                
+            # correct, repeated or already guessed
             elsif (@word.include?(l) && ((@c.include?(l)) == true)) || ((@a.include?(l)) == true)
                     return false
-                     
+            # already guessed or wrong
             elsif ((@a.include?(l)) == true) || ((('A'..'Z') === l)) || (((@c.include?(l) == true)))
                     return false
-                     
+            # not already in wrong guessed         
             elsif   @a.include?(l) == false && @c.include?(l) == false
                     @a.push(l)
                     
@@ -57,6 +55,7 @@ class HangpersonGame
             @num = 1
         end
         
+        # check if gussed chars match the word
         a= @word.chars
         b=@c.join.to_s
         for i in 0..b.size - 1
@@ -71,6 +70,7 @@ class HangpersonGame
     
     end
     
+    # win/lose
     def check_win_or_lose
         if word_with_guesses == @word
             :win

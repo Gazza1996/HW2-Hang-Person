@@ -1,7 +1,5 @@
 # Author: Gary Mannion
 
-
-
 require 'sinatra/base'
 require 'sinatra/flash'
 require './lib/hangperson_game.rb'
