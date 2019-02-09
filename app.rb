@@ -28,61 +28,70 @@ class HangpersonApp < Sinatra::Base
   end
   
   post '/create' do
-    flash[:message] = ''
-    flash[:wrong_guesses] = ''
-    flash[:word_with_guesses] = ''
     # NOTE: don't change next line - it's needed by autograder!
     word = params[:word] || HangpersonGame.get_random_word
     # NOTE: don't change previous line - it's needed by autograder!
 
     @game = HangpersonGame.new(word)
-    session[:game] =@game
     redirect '/show'
   end
   
+  get '/guess' do
+    redirect '/show'
+  end
+
   # Use existing methods in HangpersonGame to process a guess.
-  # If a guess is repeated, set flash[:message] to "You have already used that letter."
-  # If a guess is invalid, set flash[:message] to "Invalid guess."
   post '/guess' do
     letter = params[:guess].to_s[0]
-    ### YOUR CODE HERE ###
- #check if it's alreay been guessed 
-     if @game.guess(letter) == false
+
+    # Checks to make sure the letter is valid
+    if(letter.nil? || letter.empty? || letter[/[a-zA-Z]+/] != letter)
+      flash[:message] = "Invalid guess."
+    else
+      # If a guess is repeated, set flash[:message] to "You have already used that letter."
+      if(@game.guess(letter) == false)
         flash[:message] = "You have already used that letter."
-        #check if it's wrong
-     elsif @game.wrong_guesses.include? letter
-       flash[:message] = "Invalid guess"
-     end
-    #show the game state
-    flash[:wrong_guesses] = @game.wrong_guesses
-    flash[:word_with_guesses] = @game.word_with_guesses
-     if @game.check_win_or_lose == :win
-        redirect '/win'
-     elsif @game.check_win_or_lose == :play 
-        redirect '/show'
-     elsif @game.check_win_or_lose == :lose
-        redirect 'lose'
-     end
+      end
+    end
+    redirect '/show'
   end
   
-  # Everytime a guess is made, we should eventually end up at this route.
-  # Use existing methods in HangpersonGame to check if player has
-  # won, lost, or neither, and take the appropriate action.
-  # Notice that the show.erb template expects to use the instance variables
-  # wrong_guesses and word_with_guesses from @game.
   get '/show' do
-    ### YOUR CODE HERE ###
+    
+    if(@game.instance_variable_get(:@check_win_or_lose) == :win)
+      redirect '/win'
+    end
+
+    if(@game.instance_variable_get(:@check_win_or_lose) == :lose)
+      redirect '/lose'
+    end
+    
     erb :show # You may change/remove this line
   end
   
   get '/win' do
-    ### YOUR CODE HERE ###
+    
+    if(@game.instance_variable_get(:@check_win_or_lose) == :play)
+      redirect '/show'
+    end
+   
+    if(@game.instance_variable_get(:@check_win_or_lose) == :lose)
+      redirect '/lose'
+    end
+
     erb :win # You may change/remove this line
   end
   
   get '/lose' do
-    ### YOUR CODE HERE ###
+
+    if(@game.instance_variable_get(:@check_win_or_lose) == :play)
+      redirect '/show'
+    end
+
+    if(@game.instance_variable_get(:@check_win_or_lose) == :win)
+      redirect '/win'
+    end
+
     erb :lose # You may change/remove this line
   end
-  
 end
