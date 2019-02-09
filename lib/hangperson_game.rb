@@ -7,80 +7,82 @@ class HangpersonGame
 
   # Get a word from remote "random word" service
   
-    def initialize(word)
-        @word = word
-        @a = [] # wrong guess
-        @c = [] # correct guess
-        @num = 0
-        @word_with = []
-        @charNum = 0
+  # keywords
+  
+  attr_accessor :word
+  attr_accessor :guesses
+  attr_accessor :wrong_guesses
+  attr_accessor :word_with_guesses
+  attr_accessor :incorrect_guesses
+  attr_accessor :check_win_or_lose
+  
+  # function
+  def initialize(word)
+    @word = word
+    @guesses = ''
+    @wrong_guesses = ''
+    @guess = ''
+    @word_with_guesses = ''
+    @check_win_or_lose = :play
+    
+    for i in 1..word.length do
+      @word_with_guesses.concat('-')
     end
-    attr_accessor :word ,:guesses , :wrong_guesses , :win , :lose , :play
+  end # def
+  
+  
+  # A method that takes in a letter and checks to see if its inside the word
+  def guess(guessedLetter)
     
-    def guess(char)
-        # check char
-        if  char == '' || /[A-Za-z]/ !~ char || char == nil
-            raise ArgumentError
-        end
-        
-        char = char.gsub(/[\s,]/ ,"") # spaces/commas
-        
-        @charNum = char.chars.count
-       
-        char.chars.each do |l|
-            # correct and not repeated
-            if @word.include?(l) && ((@c.include? l) == false)
-                @c.push(l)
-            # correct, repeated or already guessed
-            elsif (@word.include?(l) && ((@c.include?(l)) == true)) || ((@a.include?(l)) == true)
-                    return false
-            # already guessed or wrong
-            elsif ((@a.include?(l)) == true) || ((('A'..'Z') === l)) || (((@c.include?(l) == true)))
-                    return false
-            # not already in wrong guessed         
-            elsif   @a.include?(l) == false && @c.include?(l) == false
-                    @a.push(l)
-                    
-            end
-        end
-            @wrong_guesses =  @a.join.to_s
-            @guesses = @c.join.to_s
+    # Raise exceptions if the following cases occur
+    if(guessedLetter.nil?)
+      raise ArgumentError.new("Invalid guess.")
     end
-    
-    def word_with_guesses
-        if @num == 0
-            @word.chars.each do |l|
-                @word_with.push("-")
-            end
-            @num = 1
-        end
-        
-        # check if gussed chars match the word
-        a= @word.chars
-        b=@c.join.to_s
-        for i in 0..b.size - 1
-            for j in 0..@word.size
-                if b[i] == a[j]
-                    @word_with[j] = a[j]
-                end
-            end
-        end
-        
-       @word_with.join.to_s
-    
+
+    if(guessedLetter == '')
+      raise ArgumentError.new("Invalid guess.")
     end
-    
-    # win/lose
-    def check_win_or_lose
-        if word_with_guesses == @word
-            :win
-            elsif @wrong_guesses.chars.count >= 7
-            :lose
-            else
-            :play
-        end
+
+    if(guessedLetter[/[a-zA-Z]/] != guessedLetter)
+      raise ArgumentError.new("Invalid guess.")
     end
-    
+
+    # lowercase
+    guessedLetter.downcase!
+ 
+    # not guessed already
+    if(word.include? guessedLetter)
+      unless (guesses.include? guessedLetter)
+
+        # add to list of guessed
+        guesses.concat(guessedLetter)
+        #
+        for i in 0..word.length do
+          if(guessedLetter == word[i])
+            word_with_guesses[i] = guessedLetter
+          end
+        end
+        #
+        if(word_with_guesses == word)
+          @check_win_or_lose = :win
+        end
+        return true
+      end
+    return false
+    # guess not added yet
+    else
+      unless (wrong_guesses.include? guessedLetter)
+        wrong_guesses.concat(guessedLetter)
+        # 7 guesses at a word before losing
+        if(@wrong_guesses.length>=7)
+          @check_win_or_lose = :lose
+        end
+        return true
+      end
+    end
+    return false
+  end
+
   # You can test it by running $ bundle exec irb -I. -r app.rb
   # And then in the irb: irb(main):001:0> HangpersonGame.get_random_word
   #  => "cooking"   <-- some random word
@@ -92,4 +94,5 @@ class HangpersonGame
       return http.post(uri, "").body
     }
   end
+
 end
